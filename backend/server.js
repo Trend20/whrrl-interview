@@ -6,17 +6,30 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-// use middlewares
+// Imports for Routes
+const todoRoutes = require("./routes/todoRoutes");
+
+// connect to the database
+const url = process.env.DATABASE_URI;
+mongoose.connect(url, {
+  useNewUrlParser: true})
+  .then(() => {
+    console.log("Connected to database!");
+  })
+  .catch(() => {
+    console.log("Connection failed!");
+  });
+
+  // use middlewares
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.json({type: 'application/vnd.api+json'}));
 app.use(morgan('dev'));
 
+// Set up API Routes
+app.use("/api/v1/todo", todoRoutes);
 
-// connect to the database
-const url = process.env.DATABASE_URI;
-mongoose.connect(url);
 
 
 // declare connection
