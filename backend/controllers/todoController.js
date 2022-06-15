@@ -38,93 +38,6 @@ exports.createTodo = (req, res, next) => {
         )
 }
 
-// To get list of Todos
-exports.getTodos = (req, res, next) => {
-    // Log This Request
-    console.log(
-        (new Date()).toISOString(),
-        req.method,
-        req.baseUrl
-    );
-
-    // Set up Todo query
-    const TodoQuery = Todo.find().sort({
-        onDate: -1
-    });
-
-
-    // Execute todo query
-    TodoQuery.then(
-            todos => {
-                if (!todos.length) {
-                    return res.status(404).json({
-                        'status': 'Success',
-                        'message': 'No Todos found!',
-                        'todos': todos,
-                        'todoCount': todos.length
-                    });
-                }
-                res.status(200).json({
-                    'status': 'Success',
-                    'message': 'Todos Fetched Successfully!',
-                    'todos': todos,
-                    'todoCount': todos.length
-                });
-            }
-        )
-        .catch(
-            error => {
-                res.status(500).json({
-                    'status': 'Error',
-                    'message': 'Error in DB Operation!',
-                    'error': error
-                });
-            }
-        )
-}
-
-// To get a specific Todo
-exports.getTodo = (req, res, next) => {
-    // Log This Request
-    console.log(
-        (new Date()).toISOString(),
-        req.method,
-        req.baseUrl
-    );
-
-    // Get Todo Id to modify
-    const todoId = req.params.todoId;
-
-    // Execute todo query
-    Todo.findOne({
-            _id: todoId
-        })
-        .then(
-            todo => {
-                if (!todo) {
-                    return res.status(404).json({
-                        'status': 'Success',
-                        'message': 'No Todo found with that Id!',
-                        'todo': todo
-                    });
-                }
-                res.status(200).json({
-                    'status': 'Success',
-                    'message': 'Todo Fetched Successfully!',
-                    'todo': todo
-                });
-            }
-        )
-        .catch(
-            error => {
-                res.status(500).json({
-                    'status': 'Error',
-                    'message': 'Error in DB Operation!',
-                    'error': error
-                });
-            }
-        )
-}
 
 // To Update a Todo
 exports.updateTodo = (req, res, next) => {
@@ -203,4 +116,49 @@ exports.deleteTodo = (req, res, next) => {
                 });
             }
         )
+}
+
+// To get list of Todos
+exports.getTodos = (req, res, next) => {
+  // Log This Request
+  console.log(
+      (new Date()).toISOString(),
+      req.method,
+      req.baseUrl
+  );
+
+  // Set up Todo query
+  const TodoQuery = Todo.find().sort({
+      onDate: -1
+  });
+
+
+  // Execute todo query
+  TodoQuery.then(
+          todos => {
+              if (!todos.length) {
+                  return res.status(404).json({
+                      'status': 'Success',
+                      'message': 'No Todos found!',
+                      'todos': todos,
+                      'todoCount': todos.length
+                  });
+              }
+              res.status(200).json({
+                  'status': 'Success',
+                  'message': 'Todos Fetched Successfully!',
+                  'todos': todos,
+                  'todoCount': todos.length
+              });
+          }
+      )
+      .catch(
+          error => {
+              res.status(500).json({
+                  'status': 'Error',
+                  'message': 'Error in DB Operation!',
+                  'error': error
+              });
+          }
+      )
 }
